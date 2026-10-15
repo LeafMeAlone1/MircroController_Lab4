@@ -11,6 +11,7 @@ void LCD_WriteData(unsigned char dat);
 void LCD_DisplayString(unsigned int line, unsigned char *ptr);
 void LCD_Init(void);
 void LCD_Clear(void);
+void Pulse(void);
 
 //TA defined Functions
 //void LCD_DisplayString(unsigned int line, unsigned char *ptr);
