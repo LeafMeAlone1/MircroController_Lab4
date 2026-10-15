@@ -31,7 +31,7 @@ void LCD_WriteCom(unsigned char com) {
 	GPIOB->ODR |= com1;
 	
 	GPIOB->ODR |= 0x00000004;									//set E=1;
-	delay_ms(10);
+	delay_ms(1);
 	GPIOB->ODR &= 0xFFFFFFFB;									// set E = 0;
 	
 	// send lower command data (com2)
@@ -39,7 +39,7 @@ void LCD_WriteCom(unsigned char com) {
 	GPIOB->ODR |= com2;
 	
 	GPIOB->ODR |= 0x00000004;									//set E=1
-	delay_ms(10);
+	delay_ms(1);
 	GPIOB->ODR &= 0xFFFFFFFB;									// set E = 0
 	
 	
@@ -59,7 +59,7 @@ void LCD_WriteData(unsigned char dat) {
 	
 	
 	GPIOB->ODR |= 0x00000004;									//set E=1;
-	delay_ms(10);
+	delay_ms(1);
 	GPIOB->ODR &= 0xFFFFFFFB;									// set E = 0;
 	
 	
@@ -69,7 +69,7 @@ void LCD_WriteData(unsigned char dat) {
 	
 	
 	GPIOB->ODR |= 0x00000004;									//set E=1;
-	delay_ms(10);
+	delay_ms(1);
 	GPIOB->ODR &= 0xFFFFFFFB;									// set E = 0;
 }
 void LCD_Init(void){
@@ -87,10 +87,12 @@ void LCD_Init(void){
 	GPIOB->MODER |= 0x00001554;	
 	
 	// Display initialization
-	LCD_WriteCom(0x38); // features set up
+	LCD_WriteCom(0x02);  //put into 4-bit mode
+	LCD_WriteCom(0x2c);  //put into 4-bit mode
 	LCD_WriteCom(0x0c); //display switch
 	LCD_WriteCom(0x06); // input mode Style setting
 	LCD_WriteCom(0x01); //clear
+	
 	delay_ms(5);
 	
 	
@@ -99,6 +101,7 @@ void LCD_Init(void){
 
 }void LCD_Clear(void){
 	LCD_WriteCom(0x01); //clear
+	delay_ms(1);
 }
 
 
@@ -107,12 +110,24 @@ void LCD_Init(void){
 
 void LCD_DisplayString(unsigned int line, unsigned char *ptr) {
 	unsigned char i;
-	LCD_WriteCom(0x40 + (0x40 * line));
 	
-	for (i=0; ptr[i]!= '\0'; i++)
+	if(line == 0)
 	{
-		LCD_WriteData(ptr[i]);
+		LCD_WriteCom(0x02);
+		for (i=0; ptr[i]!= '\0'; i++)
+		{
+			LCD_WriteData(ptr[i]);
+		}
+	}else if(line == 1)
+	{
+		LCD_WriteCom(0xc0);
+		for (i=0; ptr[i]!= '\0'; i++)
+		{
+			LCD_WriteData(ptr[i]);
+		}
 	}
+	
+	
 }
 
 
