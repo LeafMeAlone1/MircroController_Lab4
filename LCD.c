@@ -84,10 +84,9 @@ void LCD_Init(void){
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
 	
 	// switch to HSI clock
-		RCC->CFGR &= ~RCC_CFGR_SW;
+	RCC->CFGR &= ~RCC_CFGR_SW;
 	RCC->CFGR |= RCC_CFGR_SW_HSI;
 
-	
 	//make sure we are using HSI clock 
 	while((RCC->CFGR & RCC_CFGR_SWS_HSI) == 0);
 	
@@ -101,6 +100,8 @@ void LCD_Init(void){
 	LCD_WriteCom(0x0c); //display switch
 	LCD_WriteCom(0x06); // input mode Style setting
 	LCD_WriteCom(0x01); //clear
+	LCD_WriteCom(0x40); // reset adress to start
+	
 	
 	delay_ms(50);
 
